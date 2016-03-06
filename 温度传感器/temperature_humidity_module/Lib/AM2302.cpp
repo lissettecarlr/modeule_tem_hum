@@ -32,13 +32,13 @@ void AM2302::DHT22_PortOUT(void)
 //开始读取数据
 unsigned char AM2302::StartDHT22(void)
 {
-   static float newTime = 0, oldTime = 0,interval = 0;
-        
-	//控制输出频率
-	newTime = tskmgr.Time();    //get current time
-	interval = newTime - oldTime;
-	if(interval<UpdataInterval) return 0;
-	oldTime = newTime;   //update old time
+//   static float newTime = 0, oldTime = 0,interval = 0;
+//        
+//	//控制输出频率
+//	newTime = tskmgr.Time();    //get current time
+//	interval = newTime - oldTime;
+//	if(interval<UpdataInterval) return 0;
+//	oldTime = newTime;   //update old time
 	
    DHT22_PortOUT();//管脚输出模式
    GPIO_ResetBits(DHT22_GPIOx , DHT22_GPIO_Pin_x); 
@@ -100,13 +100,13 @@ u8 AM2302::Updata(void)
 	u8 temperature_integer;//保存温度整数部分
     u8 temperature_decimals;//保存温度小数部分
 	
-	/**************************限制更新频率********************************/
-	static float newTime = 0, oldTime = 0, interval = 0;
-	newTime = tskmgr.Time();    //get current time
-	interval = newTime - oldTime;
-	if(interval<0.5) return 0;
-	oldTime = newTime;   //update old time
-	/*********************************END*********************************/
+//	/**************************限制更新频率********************************/
+//	static float newTime = 0, oldTime = 0, interval = 0;
+//	newTime = tskmgr.Time();    //get current time
+//	interval = newTime - oldTime;
+//	if(interval<0.1) return 0;
+//	oldTime = newTime;   //update old time
+//	/*********************************END*********************************/
 	
 	if(StartDHT22())	//判断是否已经响应
 	{

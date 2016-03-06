@@ -7,12 +7,12 @@ template<typename T, u16 MAX_SIZE>
 class FIFOBuffer
 {
 private:
-	T _buf[MAX_SIZE]; //fifo buffer data
 	u16 _max_size;     //max buffer size
 	u16 _size;         //current buffer nodes
   u16 _out_idx;      //output index of buffer
   u16 _in_idx;       //input index of buffer
 public:
+	T _buf[MAX_SIZE]; //fifo buffer data
 	FIFOBuffer(); //constructor
 	bool Put(const T &data); //input one node to buffer
 	bool Get(T &data);       //get one node from buffer
