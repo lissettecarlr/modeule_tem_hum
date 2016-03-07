@@ -3,6 +3,7 @@
 AM2302::AM2302()
 {
 	UpdataInterval=0.1;
+	NewDataFlag =false ;
 }
 
 //设置管脚为输入模式
@@ -98,7 +99,7 @@ u8 AM2302::Updata(void)
 	u8 humidity_integer;//保存湿度整数部分
 	u8 humidity_decimals;//保存湿度小数部分
 	u8 temperature_integer;//保存温度整数部分
-    u8 temperature_decimals;//保存温度小数部分
+  u8 temperature_decimals;//保存温度小数部分
 	
 //	/**************************限制更新频率********************************/
 //	static float newTime = 0, oldTime = 0, interval = 0;
@@ -123,6 +124,8 @@ u8 AM2302::Updata(void)
 	  /*在这儿 把传回来的值解算出来
 		传回来的一组数据，先将高八位和第八位组合算出10进制数，其中高两位是整数，末位是小数
 	  */
+		
+		NewDataFlag = true ; //存储的是新数据
 		
 		//将湿度数据解码
 		humidity=(((u16)OriginalData[0])<<8)|((u16)OriginalData[1]);		

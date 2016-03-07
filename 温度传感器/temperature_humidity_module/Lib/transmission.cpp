@@ -1,6 +1,6 @@
 #include "transmission.h"
 
-Transmission packaging;
+Transmission CMCT_Tool;
 
 Transmission::Transmission()
 {
@@ -24,7 +24,7 @@ u8 *Transmission::humidityModuleToModule(u8 data1,u8 data2,u8 adc)
 	ModuleToModule[4]=0x00;
 	ModuleToModule[5]=0x01;
 	//类型
-	ModuleToModule[6]=0x01;
+	ModuleToModule[6]=HumidityNumber;
 	//数据
 	ModuleToModule[7]=data1;
 	ModuleToModule[8]=data2;
@@ -51,7 +51,7 @@ u8 *Transmission::temperatureModuleToModule(u8 data1,u8 data2,u8 adc)
 	ModuleToModule[4]=0x00;
 	ModuleToModule[5]=0x01;
 	//类型
-	ModuleToModule[6]=0x02;
+	ModuleToModule[6]=TemperatureNumber;
 	//数据
 	ModuleToModule[7]=data1;
 	ModuleToModule[8]=data2;
@@ -79,7 +79,7 @@ u8 *Transmission::humidityModuleToUser(u8 data1,u8 data2,u8 adc)
 	ModuleToUser[4]=0x00;
 	ModuleToUser[5]=0x01;
 	//数据类型
-	ModuleToUser[6]=0x01;
+	ModuleToUser[6]=HumidityNumber;
 	//数据
 	ModuleToUser[7]=data1;
 	ModuleToUser[8]=data2;
@@ -104,7 +104,7 @@ u8 *Transmission::temperetureModuleToUser(u8 data1,u8 data2,u8 adc)
 	ModuleToUser[4]=0x00;
 	ModuleToUser[5]=0x01;
 	//数据类型
-	ModuleToUser[6]=0x02;
+	ModuleToUser[6]=TemperatureNumber;
 	//数据
 	ModuleToUser[7]=data1;
 	ModuleToUser[8]=data2;
@@ -140,3 +140,36 @@ u8 Transmission::CommandParsing(u8 command[8])
 	}
 	return 0;
 }
+
+//监听一个端口，返回一个命令
+u8 Transmission::GetStateOrder(USART &ListeningCOM)
+{
+		u8 comand[8]={0};
+		u8 ch=0;
+		u8 num = ListeningCOM.ReceiveBufferSize();
+		if(num>7)   //一帧命令包含8个字节
+		{
+				ListeningCOM.GetReceivedData(&ch,1);
+			if(ch == 0xFF)
+			{
+				ListeningCOM.GetReceivedData(&ch,1);
+				if(ch == 0xDD)
+				{
+					while(ListeningCOM.ReceiveBufferSize()<6);//等待数据
+					comand[0]=0xff;
+					comand[1]=0xDD;
+					ListeningCOM.GetReceivedData(comand+2,6);
+					ListeningCOM.ClearReceiveBuffer();
+					return CommandParsing(comand);  //解包
+				}
+				else return 0;
+			}
+			else
+				return 0;
+		}
+		else 
+			return 0;
+}
+
+
+

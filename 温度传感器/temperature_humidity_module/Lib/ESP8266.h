@@ -24,9 +24,11 @@ class esp8266
 		//设置AP模式下的参数 ，  名字、密码、通道、加密方式
     bool setSoftAPParam( char* ssid,  char* pwd, uint8_t chl = 7, uint8_t ecn = 4);
 	  bool enableOrDisableMUX(u8 choose);//选择是否开启多路访问
-		bool ConnectServer(char*  type, char*  addr, int port);
+		bool ConnectServer(char*  type, char*  addr, int port); //在为开启多路访问下链接服务器
     bool ConnectServerID(int mux_id, char*  type, char*  addr, int port);//连接到服务器(由于多路访问，需要选择ID号)
 		void Send(char ID,int Lenth,u8 data[]); //发送命令，前一个为ID号，后一个为发送字节长度
+		void Send(int Lenth,u8 data[]); //发送命令，发送字节长度
+		void Send(char * str); //发送命令，发送字节长度
 	
 	private:
 		USART &mUsart;

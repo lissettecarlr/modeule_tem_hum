@@ -8,6 +8,7 @@ class AM2302{
 	private:
 		
 		u8 sbuf,check;
+
 		void DHT22_PortIN(void);
 		void DHT22_PortOUT(void);
 		unsigned char StartDHT22(void);
@@ -15,6 +16,7 @@ class AM2302{
 		float UpdataInterval;
 		u8 OriginalData[4];
 	public:
+		bool NewDataFlag; //由于判别是否保存的是新数据 ，在校验和出更改
 		u8 DHT22_data[4];
 		AM2302();
 		u8 Updata(void);

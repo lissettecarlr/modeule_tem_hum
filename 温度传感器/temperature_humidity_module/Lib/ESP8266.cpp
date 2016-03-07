@@ -237,16 +237,48 @@ bool esp8266::ConnectServerID(int mux_id, char*  type, char*  addr, int port)
 		else
 			return false;
 }
+bool esp8266::ConnectServer(char*  type, char*  addr, int port)
+{
+		char * data_temp;
+		rx_empty();
+		mUsart<<"AT+CIPSTART=";
+		mUsart<<"\""<<type<<"\",\""<<addr<<"\","<<port<<"\r\n";
+		data_temp = recvString("OK", "ERROR");
+		if(strstr(data_temp,"OK"))
+			return true;
+		else
+			return false;
+}
 
-
-//发送有问题
 void esp8266::Send(char ID,int Lenth,u8 data[])
 {
 	ID=ID+48;//将数字转化为字符
-//	Lenth=Lenth+48;
+	//Lenth=Lenth+48;
 	rx_empty();
 	mUsart<<"AT+CIPSEND=";
 	mUsart<<ID<<","<<Lenth<<"\r\n";
 	tskmgr.DelayMs(100);
 	mUsart.SendData(data,Lenth);
+}
+
+void esp8266::Send(int Lenth,u8 data[])
+{
+	rx_empty();
+	mUsart<<"AT+CIPSEND=";
+	mUsart<<Lenth<<"\r\n";
+	tskmgr.DelayMs(100);
+	mUsart.SendData(data,Lenth);
+}
+
+void esp8266::Send(char * str)
+{
+	rx_empty();
+	u8 number=0;
+	while( (*str)!= '\0')
+		{number++;str++;}
+	
+	mUsart<<"AT+CIPSEND=";
+	mUsart<<number<<"\r\n";
+	tskmgr.DelayMs(100);
+	mUsart<<(str-number);
 }
