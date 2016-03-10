@@ -3,6 +3,7 @@
 
 #include "stm32f10x.h"
 #include "USART.h"
+#include "esp8266.h"
 
 /*define**************************************************/
 #define HumidityNumber 0x01
@@ -28,6 +29,7 @@ class Transmission{
 		u8 CommandParsing(u8 command[8]);//命令协议校验解包
 	
 		u8 GetStateOrder(USART &ListeningCOM);//监听某个端口 返回命令字节
+		void SendOnce(u8 data1,u8 data2,u8 data3,u8 data4,u8 Voltage,USART &usart, esp8266 &esp);
 	
 };
 

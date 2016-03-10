@@ -125,7 +125,7 @@ u8 Transmission::CommandParsing(u8 command[8])
 	{
 		u32 equipment;
 		equipment=(u32)(command[2]<<24)+(u32)(command[3]<<16)+(u32)(command[4]<<8)+(u32)command[5];
-		if(equipment==2) //看是否是该设备
+		if(equipment==1) //看是否是该设备
 		{
 			u32 sum=0;
 			for(u8 i=0;i<7;i++)
@@ -169,6 +169,20 @@ u8 Transmission::GetStateOrder(USART &ListeningCOM)
 		}
 		else 
 			return 0;
+}
+
+//发送数据给上位机
+void Transmission::SendOnce(u8 data1,u8 data2,u8 data3,u8 data4,u8 Voltage,USART &usart, esp8266 &esp)
+{
+				esp.Send(20,humidityModuleToUser(data1,data2,Voltage));
+				tskmgr.DelayMs(1000);//如果不延时，下一条将发送不出去
+				tskmgr.DelayMs(1000);
+				esp.Send(20,temperetureModuleToUser(data3,data4,Voltage));
+		
+				
+				usart.SendData((humidityModuleToUser(data1,data2,Voltage)),20);			
+				usart.SendData((temperetureModuleToUser(data3,data4,Voltage)),20);
+	
 }
 
 
