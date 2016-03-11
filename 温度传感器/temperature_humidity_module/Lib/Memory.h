@@ -56,20 +56,9 @@ Memory(uint32_t startAddress=(0x08000000+63*MEMORY_PAGE_SIZE),bool useHalfWord=t
 bool Read(uint16_t relativeAddress, uint8_t* Data,u16 length);
 		
 
-///////////////////////
-///读取储存器中特定位置的值
-///@param -relativeAddress 相对于开始地址的地址
-///@param -Data 读出的数据存放的地址
-///@retval -1 : 读取成功 -0：读取失败
-///////////////////////
-bool Read(uint16_t relativeAddress, uint16_t* Data,u16 length);
+bool Read(u16 pageNumber,u16 position,u16* data,u16 length);
 
-///////////////////////
-///读取储存器中特定位置的值
-///@param -relativeAddress 相对于开始地址的地址
-///@param -Data 读出的数据存放的地址
-///@retval -1 : 读取成功 -0：读取失败
-///////////////////////
+
 bool Read(uint16_t relativeAddress, uint32_t* Data,u16 length);
 		
 ///////////////////////
@@ -82,29 +71,16 @@ bool Read(uint16_t relativeAddress, uint32_t* Data,u16 length);
 bool Write(uint16_t pageNumber, uint8_t* Data,u16 length);
 		
 		
-///////////////////////
-///向储存器中特定位置写值
-///@param -pageNumber 相对于开始地址的地址
-///@param -Data 将要写入的数据
-///@attention 如果构造构造函数的参数useHalfWord为false时，会转换成u32再储存
-///@retval -1 : 写入成功 -0：写入失败
-///////////////////////
-bool Write(uint16_t pageNumber, uint16_t* Data,u16 length);
+bool Write(uint16_t pageNumber,u16 position,uint16_t* data,u16 length);
 		
-///////////////////////
-///向储存器中特定位置写值
-///@param -pageNumber 相对于开始地址的地址
-///@param -Data 将要写入的数据
-///@attention 如果初始化时选择的是使用半字节，则会将参数强制转换成u16型数据然后再进行储存，可能会出现数据的丢失
-///@retval -1 : 写入成功 -0：写入失败
-///////////////////////
+
 bool Write(uint16_t pageNumber, uint32_t* Data,u16 length);
 		
 
-//字符串的存储于读取
-bool Write(uint16_t pageNumber, char* str);
-bool Read(uint16_t pageNumber,char *str);
-
+//字符串的存储于读取,参数：页码，页码中位置，字符串
+bool Write(uint16_t pageNumber,u16 position,char* str);
+bool Read(uint16_t pageNumber,u16 position,char *str);
+bool Clear(uint16_t pageNumber);
 
 };
 

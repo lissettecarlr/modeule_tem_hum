@@ -182,7 +182,6 @@ void Transmission::SendOnce(u8 data1,u8 data2,u8 data3,u8 data4,u8 Voltage,USART
 				
 				usart.SendData((humidityModuleToUser(data1,data2,Voltage)),20);			
 				usart.SendData((temperetureModuleToUser(data3,data4,Voltage)),20);
-	
 }
 
 

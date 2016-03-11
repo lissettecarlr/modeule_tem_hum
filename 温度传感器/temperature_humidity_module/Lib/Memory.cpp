@@ -17,14 +17,14 @@ Memory::Memory(uint32_t startAddress,bool useHalfWord)
 ///@param -Data 读出的数据存放的地址
 ///@retval -1 : 读取成功 -0：读取失败
 ///////////////////////
-bool Memory::Read(uint16_t pageNumber, uint16_t* data,u16 length)
+bool Memory::Read(u16 pageNumber,u16 position,u16* data,u16 length)
 {
 	u16 dataLength=length;
 	if(mUseHalfWord)
 	{
 		while(dataLength)
 		{
-			*data=(*(__IO uint16_t*)(mStartAddress+pageNumber*MEMORY_PAGE_SIZE+(length-dataLength)*2));
+			*data=(*(__IO uint16_t*)(mStartAddress+pageNumber*MEMORY_PAGE_SIZE+position  +(length-dataLength)*2));
 			++data;
 			--dataLength;
 		}
@@ -33,7 +33,7 @@ bool Memory::Read(uint16_t pageNumber, uint16_t* data,u16 length)
 	{
 		while(dataLength)
 		{
-			*data=(u32)(*(__IO uint32_t*)(mStartAddress+pageNumber*MEMORY_PAGE_SIZE+(length-dataLength)*4));
+			*data=(u32)(*(__IO uint32_t*)(mStartAddress+pageNumber*MEMORY_PAGE_SIZE+position  +(length-dataLength)*4));
 			++data;
 			--dataLength;
 		}
@@ -118,20 +118,27 @@ bool Memory::Write(uint16_t pageNumber, uint8_t* data,u16 length)
 ///@param -pageNumber 相对于开始地址的地址
 ///@param -Data 将要写入的数据
 ///@retval -1 : 写入成功 -0：写入失败
-///////////////////////
-bool Memory::Write(uint16_t pageNumber, uint16_t* data,u16 length)
+////
+bool Memory::Write(uint16_t pageNumber,u16 position,uint16_t* data,u16 length)
 {
+	if(position+length>MEMORY_PAGE_SIZE)
+		return false;
+	
 	u16 dataLength=length;
 	FLASH_Unlock();
+	
+	if(position==0){
 	FLASH_ClearFlag(FLASH_FLAG_BSY|FLASH_FLAG_EOP|
 					FLASH_FLAG_PGERR|FLASH_FLAG_WRPRTERR);
 	if(!FLASH_ErasePage(mStartAddress+pageNumber*MEMORY_PAGE_SIZE))//擦除页
 		return false;
+	}
+	
 	if(mUseHalfWord)
 	{
 		while(dataLength)
 		{
-			if(FLASH_COMPLETE!=FLASH_ProgramHalfWord(mStartAddress+pageNumber*MEMORY_PAGE_SIZE+(length-dataLength)*2,*data))
+			if(FLASH_COMPLETE!=FLASH_ProgramHalfWord(mStartAddress+pageNumber*MEMORY_PAGE_SIZE+position  +(length-dataLength)*2,*data))
 				return false;
 			++data;
 			--dataLength;
@@ -141,7 +148,7 @@ bool Memory::Write(uint16_t pageNumber, uint16_t* data,u16 length)
 	{
 		while(dataLength)
 		{
-			if(FLASH_COMPLETE!=FLASH_ProgramWord(mStartAddress+pageNumber*MEMORY_PAGE_SIZE+(length-dataLength)*4,(u32)*data))
+			if(FLASH_COMPLETE!=FLASH_ProgramWord(mStartAddress+pageNumber*MEMORY_PAGE_SIZE+position +(length-dataLength)*4,(u32)*data))
 				return false;
 			++data;
 			--dataLength;
@@ -150,6 +157,7 @@ bool Memory::Write(uint16_t pageNumber, uint16_t* data,u16 length)
 	FLASH_Lock();
 	return true;
 }
+
 		
 ///////////////////////
 ///向储存器中特定位置写值
@@ -190,21 +198,26 @@ bool Memory::Write(uint16_t pageNumber, uint32_t* data,u16 length)
 }
 
 
-bool Memory::Write(uint16_t pageNumber, char* str)
+//字符串的保存方式为（字长+字符串）
+bool Memory::Write(uint16_t pageNumber,u16 position,char* str)
 {
 	u16 number=0;
 	u32 Lenth=0;
-		FLASH_Unlock();
+	FLASH_Unlock();
+	if(position ==0){//只有对该页开始位置写入时查出这也,不允许直接从中间开始写
 	FLASH_ClearFlag(FLASH_FLAG_BSY|FLASH_FLAG_EOP|
 					FLASH_FLAG_PGERR|FLASH_FLAG_WRPRTERR);
 	if(!FLASH_ErasePage(mStartAddress+pageNumber*MEMORY_PAGE_SIZE))//擦除页
 				return false;
+	}
 	
 	//计算出字符串长度
 	while( (*str)!= '\0')
 		{number++;str++;}
-	if(number<256)
-		FLASH_ProgramHalfWord(mStartAddress+pageNumber*MEMORY_PAGE_SIZE+Lenth,number); //保存字符串长度
+	if(number+position<1024)
+		FLASH_ProgramHalfWord((mStartAddress+pageNumber*MEMORY_PAGE_SIZE+position)  +Lenth,number); //保存字符串长度
+	else
+		return false;
 		Lenth+=2;
 	str=str - number ;
 	u16 temp;
@@ -213,14 +226,14 @@ bool Memory::Write(uint16_t pageNumber, char* str)
 		{
 			temp =( (*str)<<8 )+( *(str+1));			
 			str+=2;
-			FLASH_ProgramHalfWord(mStartAddress+pageNumber*MEMORY_PAGE_SIZE+Lenth,temp);
+			FLASH_ProgramHalfWord(mStartAddress+pageNumber*MEMORY_PAGE_SIZE+position  +Lenth,temp);
 			Lenth+=2;
 			number-=2;
 			
 			if(number==1)
 			{
 				temp =*str;	
-				FLASH_ProgramHalfWord(mStartAddress+pageNumber*MEMORY_PAGE_SIZE+Lenth,temp);
+				FLASH_ProgramHalfWord(mStartAddress+pageNumber*MEMORY_PAGE_SIZE+position +Lenth,temp);
 				str++;
 			}
 			
@@ -232,18 +245,20 @@ bool Memory::Write(uint16_t pageNumber, char* str)
 
 
 //字符串读取
-bool  Memory::Read(uint16_t pageNumber,char *str)
+bool  Memory::Read(uint16_t pageNumber,u16 position,char *str)
 {
 	u16 number=0;
 	u32 Lenth=0;
 	u16 temp;
-	number=(*( uint16_t*)(mStartAddress+pageNumber*MEMORY_PAGE_SIZE+Lenth));
+	number=(*( uint16_t*)(mStartAddress+pageNumber*MEMORY_PAGE_SIZE+position  +Lenth));
+	if(number + position>1024)
+		return false;
 	Lenth+=2;
 	u16 temp_number = number;
-
+	
 		while(number>0)
 		{
-			temp = (*(__IO uint16_t*)(mStartAddress+pageNumber*MEMORY_PAGE_SIZE+Lenth));
+			temp = (*(__IO uint16_t*)(mStartAddress+pageNumber*MEMORY_PAGE_SIZE+position  +Lenth));
 			*str = (u8)(temp>>8);
 			*(str+1) = (u8)temp;
 			Lenth +=2;
@@ -252,7 +267,7 @@ bool  Memory::Read(uint16_t pageNumber,char *str)
 			
 			if(number ==1)//如果是奇数
 			{
-				temp = (*(__IO uint16_t*)(mStartAddress+pageNumber*MEMORY_PAGE_SIZE+Lenth));
+				temp = (*(__IO uint16_t*)(mStartAddress+pageNumber*MEMORY_PAGE_SIZE+position  +Lenth));
 				*(str) = (u8)temp;
 				number--;
 				str++;
@@ -267,3 +282,14 @@ bool  Memory::Read(uint16_t pageNumber,char *str)
 
 }
 
+//擦除
+bool Memory::Clear(uint16_t pageNumber)
+{
+	FLASH_Unlock();
+		FLASH_ClearFlag(FLASH_FLAG_BSY|FLASH_FLAG_EOP|
+		FLASH_FLAG_PGERR|FLASH_FLAG_WRPRTERR);
+		if(!FLASH_ErasePage(mStartAddress+pageNumber*MEMORY_PAGE_SIZE))//擦除页
+				return false;
+		FLASH_Lock();
+	return true;
+}

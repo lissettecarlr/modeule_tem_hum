@@ -10,6 +10,7 @@
 #include "Hint.h"
 #include "Memory.h"
 #include "stdlib.h"
+#include "WIFI_Memory.h"
 
 
 /*DEFINE********************************************************/
@@ -27,8 +28,10 @@ u8 ConnectNetwork(char *WifiName,char* WifiPassword,char *IP,int COM);
 
 USART com(1,115200,true);   //USART1
 USART WIFI(3,115200,true);   //USART3
+
 GPIO Beep(GPIOA,11,GPIO_Mode_Out_PP,GPIO_Speed_50MHz);
 GPIO Led(GPIOB,0,GPIO_Mode_Out_PP,GPIO_Speed_50MHz);
+
 Memory InfoStore(0x08000000+100*MEMORY_PAGE_SIZE,true);//ip存储，长度+IP地址的存档格式，先读取出字符串长度
 
 
@@ -42,30 +45,45 @@ int main(){
 	
 	u8 order=0;
 		
-	char *ip = (char*)calloc(15, sizeof(char*) ); 
-	
-	
-	char *ip1 = "120.27.119.115";
-	char *ip2 = "192.168.191.1";
-	
+//	char *ip = (char*)calloc(15, sizeof(char*) ); 
 
+//	char *ip1 = "120.27.119.115";
+//	char *ip2 = "192.168.191.1";
+//	
+//	uint16_t a =0x01;
+//	uint16_t b;
+//	
+//	InfoStore.Write(0,0,ip1); //保存IP
+//	InfoStore.Write(0,20,&a,1);
+//	
+//	InfoStore.Read(0,0,ip);//读取IP
+//	InfoStore.Read(0,20,&b,1);//读取IP
 	
+//	com<<ip;
 	
+		char *ip1 = "FFF";//3
+		char *ip2 = "f19940202";//9
+//		InfoStore.Clear(0);
+		
+		WifiMemory wifimemory(InfoStore);
+		wifimemory.Save(ip1,ip2);
+		
 	
-	Led.SetLevel(1);//将指示灯熄灭
+	  Led.SetLevel(1);//将指示灯熄灭
+//		InfoStore.Clear(0);
 	
-	if(ConnectNetwork("FFF","f19940202",ip2,8080))
-	{
-			com<<"succeed\n";
-			Hint.ledFlicker_2s();
-	}
-	else
-	{
-			com<<"false\n";
-			Led.SetLevel(0);
-	}
-	
-	
+//	if(ConnectNetwork("FFF","f19940202",ip2,8080))
+//	{
+//			com<<"succeed\n";
+//			Hint.ledFlicker_2s();
+//	}
+//	else
+//	{
+//			com<<"false\n";
+//			Led.SetLevel(0);
+//	}
+//	
+//	
 	
 	
 	while(1)
@@ -95,11 +113,11 @@ int main(){
 }
 
 
+
+
 u8 ConnectNetwork(char *WifiName,char* WifiPassword,char *IP,int COM)
 {
-	
 	//网络连接
-	
 	if(!wifi.kick())
 		return 0;
 	tskmgr.DelayMs(1000);
@@ -119,6 +137,17 @@ u8 ConnectNetwork(char *WifiName,char* WifiPassword,char *IP,int COM)
 }
 
 
+
+/*
+网络连接方案
+		首先进行flash读取，如果发现没有保存连接wifi则自动切换到server模式，如果轮询保存的wifi都未连接上则也切换到server模式
+		（未考虑连上的WIFI没有网络的问题，这将会导致数据无法上传到服务器）
+		server模式需要有一下功能：
+				1.能够接受到客服端的注册命令
+				2.接受到客服端发送来的WIFI的账号密码。并将其保存到flash中。
+				3.复位重启
+				4.清空flash
+*/
 
 
 

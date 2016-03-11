@@ -459,16 +459,6 @@
               <FilePath>.\Lib\ESP8266.h</FilePath>
             </File>
             <File>
-              <FileName>Hint.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\Lib\Hint.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>Hint.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\Lib\Hint.h</FilePath>
-            </File>
-            <File>
               <FileName>Memory.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\Lib\Memory.cpp</FilePath>
@@ -492,6 +482,26 @@
               <FileName>transmission.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>.\Lib\transmission.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>WIFI_Memory.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\Lib\WIFI_Memory.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>WIFI_Memory.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Lib\WIFI_Memory.h</FilePath>
+            </File>
+            <File>
+              <FileName>Hint.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>.\Lib\Hint.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>Hint.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\Lib\Hint.h</FilePath>
             </File>
           </Files>
         </Group>
