@@ -9,14 +9,14 @@ class WifiMemory{
 	private:
 		Memory &infoSpace;
 	  //每页保存的前三个基础属性
-		u16 wifiNumber;//该页保存的wifi数
-		u16	occupancy; //用于判别该页剩余长度
-		u16 pageNumber; //剩余页数
+		u16 wifiNumber;//WIFI个数
+		u16	dataLenth; //总长度
+		u16 pageNumber; //总页数
 	
-		u16 Sum;//得到wifi总数
 		u16 Pointer; //当前所指位置 
 	
-		bool getNowPageInfo(u16 page); //读取该页基本信息
+		bool LoadSaveInfo(); //读取该页基本信息
+		bool UpdataSaveInfo(); //读取该页基本信息
 	
 	public:
 		WifiMemory(Memory &InfoSpace);

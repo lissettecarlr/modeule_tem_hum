@@ -64,8 +64,9 @@ int main(){
 		char *ip1 = "FFF";//3
 		char *ip2 = "f19940202";//9
 //		InfoStore.Clear(0);
-		
 		WifiMemory wifimemory(InfoStore);
+//		wifimemory.ClearAllData();
+		
 		wifimemory.Save(ip1,ip2);
 		
 	
