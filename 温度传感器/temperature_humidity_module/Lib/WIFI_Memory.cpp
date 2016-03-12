@@ -12,8 +12,10 @@ bool WifiMemory::Save(char* name,char* password)
 	u16 nowPageLenth=0;
 	wifiNumber++;//更新量信息
 	
-	if(dataLenth==0xff)
+	if(dataLenth==0xffff ||dataLenth==0)
+	{
 			nowPageLenth=0;
+	}
 	else
 			nowPageLenth=dataLenth%MEMORY_PAGE_SIZE;//计算出在也中的位置
 
@@ -67,6 +69,42 @@ bool WifiMemory::Save(char* name,char* password)
 
 bool WifiMemory::Load(char* name,char* password)
 {
+	if(wifiNumber==0)
+		return false;
+	
+	u16 lenth=0;
+	infoSpace.Read(PointerPage,Pointer,&lenth,1); //读取name长度
+	
+	if(lenth==0xffff)//已经读取完
+	{
+		PointerPage=1;
+		Pointer=0;
+		return false ;
+	}
+	
+	infoSpace.Read(PointerPage,Pointer,name);//读取IP
+	
+	if(lenth%2==0)
+		Pointer=Pointer+lenth+2;
+	else
+		Pointer=Pointer+lenth+3;	
+	
+	infoSpace.Read(PointerPage,Pointer,&lenth,1); //读取name长度
+	infoSpace.Read(PointerPage,Pointer,password);//读取IP
+	
+	if(lenth%2==0)
+		Pointer=Pointer+lenth+2;
+	else
+		Pointer=Pointer+lenth+3;
+	
+	infoSpace.Read(PointerPage,Pointer,&lenth,1); //读取name长度
+	if(PointerPage<pageNumber &&lenth==0xffff) //翻页
+	{
+		PointerPage++;
+		Pointer=0;
+		return true;
+	}
+	
 	return true;
 }
 
@@ -80,12 +118,14 @@ bool WifiMemory::LoadSaveInfo()
 			dataLenth=0;
 			pageNumber=0;
 			Pointer=0;
+			PointerPage=1;
 			return false;
 		}
 		else{
 			infoSpace.Read(0,2,&dataLenth,1);
 			infoSpace.Read(0,4,&pageNumber,1);
 			Pointer=0;//将读取指针放到数据开始位置
+			PointerPage=1;
 				return true;
 		}
 }
@@ -96,8 +136,9 @@ bool WifiMemory::UpdataSaveInfo() //读取该页基本信息
 		infoSpace.Write(0,0,&wifiNumber,1);//对开始位置写入时会擦除该页
 		infoSpace.Write(0,2,&dataLenth,1);
 		infoSpace.Write(0,4,&pageNumber,1);
+		Pointer=0;
+		PointerPage=1;
 		return true;
-	
 }
 
 
@@ -115,6 +156,9 @@ bool WifiMemory::ClearAllData()
 			pageNumber--;
 		}
 			infoSpace.Clear(0);//擦除信息页
+		
+		LoadSaveInfo();
+		UpdataSaveInfo();
 	 return true;
 }
 

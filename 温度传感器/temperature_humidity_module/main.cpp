@@ -63,14 +63,49 @@ int main(){
 	
 		char *ip1 = "FFF";//3
 		char *ip2 = "f19940202";//9
+		char *ip3 = "fzj";//3
+		char *ip4 = "hahahahahaha";//9
+		
+		
+		char *ipA = (char*)calloc(20, sizeof(char*) ); 
+		char *ipB = (char*)calloc(20, sizeof(char*) ); 
+		
 //		InfoStore.Clear(0);
+
 		WifiMemory wifimemory(InfoStore);
 //		wifimemory.ClearAllData();
 		
-		wifimemory.Save(ip1,ip2);
-		
-	
+//		wifimemory.Save(ip1,ip2);
 	  Led.SetLevel(1);//将指示灯熄灭
+		
+		u8 ch;
+		while(1)
+		{
+				u8 num = com.ReceiveBufferSize();
+				if(num>=1)
+				{
+						com.GetReceivedData(&ch,1);
+					  com.ClearReceiveBuffer();
+					switch (ch)
+					{
+						case 1:{wifimemory.ClearAllData();com<<"clear!!\n";}break;
+						case 2:{wifimemory.Save(ip1,ip2);com<<"Save1\n";}break;
+						case 3:{wifimemory.Save(ip3,ip4);com<<"Save2\n";}break;
+						case 4:{
+											if(wifimemory.Load(ipA,ipB))
+											{
+												com<<ipA<<"\n";
+												com<<ipB<<"\n";
+											}
+											else
+													com<<"No data\n";
+									}break;
+					}
+				}
+			
+		}
+		
+		
 //		InfoStore.Clear(0);
 	
 //	if(ConnectNetwork("FFF","f19940202",ip2,8080))

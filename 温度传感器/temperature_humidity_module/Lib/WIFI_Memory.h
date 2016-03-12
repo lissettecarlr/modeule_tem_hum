@@ -14,6 +14,7 @@ class WifiMemory{
 		u16 pageNumber; //总页数
 	
 		u16 Pointer; //当前所指位置 
+		u16 PointerPage;//当前页数
 	
 		bool LoadSaveInfo(); //读取该页基本信息
 		bool UpdataSaveInfo(); //读取该页基本信息
