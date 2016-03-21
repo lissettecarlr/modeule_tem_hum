@@ -40,6 +40,18 @@ void TaskManager::DelayMs(u16 nms)
 	while((Time()-OldT)<double(nms)/1000.0);
 }
 
+bool TaskManager::ClockTool(double &record,double timeout)
+{
+	 double NowTime = Time();
+		if(NowTime - record >=timeout)
+		{
+			record = NowTime; //更新记录
+			return true;
+		}
+		else
+			return false;
+}
+
 //SysTick interrupt IRQ handler
 extern "C"
 {

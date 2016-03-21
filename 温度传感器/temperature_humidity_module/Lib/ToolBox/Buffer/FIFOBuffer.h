@@ -1,25 +1,81 @@
+/**
+*@file FIFOBuffer.h
+*@author cq_dan3  2015-10-20 first creat FIFOBuffer class
+*        Neutree  2015-10-28 add comments for FIFOBuffer class
+*@version v1.1
+*@brief A template for FIFO queue
+*@copyright CQUTIOTLIB all right reserved
+*
+*/
+
 #ifndef _FIFO_BUFFER_H_
 #define _FIFO_BUFFER_H_
 
 #include "stm32f10x.h"
 
+
+/**
+  *@breif A FIFO queue Template for FIFO application
+  *
+  *
+  */
 template<typename T, u16 MAX_SIZE>
 class FIFOBuffer
 {
 private:
+	
 	u16 _max_size;     //max buffer size
 	u16 _size;         //current buffer nodes
-  u16 _out_idx;      //output index of buffer
-  u16 _in_idx;       //input index of buffer
+	u16 _out_idx;      //output index of buffer
+	u16 _in_idx;       //input index of buffer
 public:
-	T _buf[MAX_SIZE]; //fifo buffer data
-	FIFOBuffer(); //constructor
-	bool Put(const T &data); //input one node to buffer
-	bool Get(T &data);       //get one node from buffer
-	bool Puts(T *pData, u16 num); //input multi nodes to buffer
-  bool Gets(T *pData, u16 num); //get multi nodes from buffer
-	u16 Size();   //get current size of buffer
-	void Clear(); //clear buffer
+	T _buf[MAX_SIZE];  //fifo buffer data
+	/////////////////////////
+	///@breif constructor
+	/////////////////////////
+	FIFOBuffer(); 
+	
+	
+	/////////////////////////
+	///@breif put node data to queue 
+	///@param data the node data will put into queue
+	////////////////////////
+	bool Put(const T &data); 
+	
+	
+	////////////////////////
+	///@breif get one node data from queue,the length of queue will decrease one
+	///@param data the destination of node data from queue
+	////////////////////////
+	bool Get(T &data);
+	
+	
+	//////////////////////////////
+	///@breif put multiple node data to queue 
+	///@param pdata the first node data adress of node data array will put into queue
+	///@param num the length of node data that will put into queue
+	/////////////////////////////
+	bool Puts(T *pData, u16 num); 
+	
+	
+	//////////////////////////////
+	///@breif get multiple node data to queue 
+	///@param pdata the first node data adress of node data array will get from the queue
+	///@param num the length of node data that will get from the queue
+	/////////////////////////////
+	bool Gets(T *pData, u16 num);
+	
+	////////////////////////////
+	///@breif get the size of queue
+	///@retval the size of queue
+	///////////////////////////
+	u16 Size();
+	
+	
+	////////////////////////////////
+	///@breif clear the queue
+	////////////////////////////////
+	void Clear();
 };
 
 
@@ -28,8 +84,8 @@ FIFOBuffer<T,MAX_SIZE>::FIFOBuffer()
 {
 	_max_size = MAX_SIZE;     //max buffer size
 	_size = 0;         //current buffer nodes
-  _out_idx = 0;      //output index of buffer
-  _in_idx = 0;       //input index of buffer
+	_out_idx = 0;      //output index of buffer
+	_in_idx = 0;       //input index of buffer
 }
 
 //input one node to buffer
@@ -113,8 +169,8 @@ template<typename T, u16 MAX_SIZE>
 void FIFOBuffer<T,MAX_SIZE>::Clear()
 {
 	_size = 0;         //current buffer nodes
-  _out_idx = 0;      //output index of buffer
-  _in_idx = 0;       //input index of buffer
+	_out_idx = 0;      //output index of buffer
+	_in_idx = 0;       //input index of buffer
 }
 
 

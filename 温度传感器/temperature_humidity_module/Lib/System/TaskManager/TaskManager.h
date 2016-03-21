@@ -14,6 +14,7 @@ public:
 	static double Time(void);    //get current time
 	void DelayUs(u16 nus);
 	void DelayMs(u16 nms);
+	bool ClockTool(double &record,double timeout);  //传入一个时间记录值和一个超时时间 记录达到了超时时间返回tree
 };
 extern TaskManager tskmgr;
 

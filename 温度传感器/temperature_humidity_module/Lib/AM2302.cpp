@@ -138,7 +138,7 @@ u8 AM2302::Updata(void)
 		temperature_decimals=temperature%10;
 		
 		//重新存入
-		DHT22_data[0]=humidity_integer;
+ 		DHT22_data[0]=humidity_integer;
 		DHT22_data[1]=humidity_decimals;			
 		DHT22_data[2]=temperature_integer;
 		DHT22_data[3]=temperature_decimals;

@@ -104,7 +104,7 @@ bool WifiMemory::Load(char* name,char* password)
 		Pointer=0;
 		return true;
 	}
-	
+	 
 	return true;
 }
 

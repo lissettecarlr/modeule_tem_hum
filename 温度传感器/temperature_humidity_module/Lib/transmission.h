@@ -26,10 +26,15 @@ class Transmission{
 		u8 *humidityModuleToUser(u8 data1,u8 data2,u8 adc);
 		u8 *temperetureModuleToUser(u8 data1,u8 data2,u8 adc);
 	
+		u8 *CO2_ModuleToUser(u8 data1,u8 data2,u8 adc);
+		u8 *CO2_ModuleToModule(u8 data1,u8 data2,u8 adc);
+	
 		u8 CommandParsing(u8 command[8]);//命令协议校验解包
 	
 		u8 GetStateOrder(USART &ListeningCOM);//监听某个端口 返回命令字节
+
 		void SendOnce(u8 data1,u8 data2,u8 data3,u8 data4,u8 Voltage,USART &usart, esp8266 &esp);
+	
 	
 };
 
