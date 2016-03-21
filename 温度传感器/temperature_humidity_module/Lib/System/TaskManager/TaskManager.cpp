@@ -40,6 +40,12 @@ void TaskManager::DelayMs(u16 nms)
 	while((Time()-OldT)<double(nms)/1000.0);
 }
 
+void TaskManager::DelayS(u16 ns)
+{
+	double OldT=Time();
+	while((Time()-OldT)<double(ns));
+}
+
 bool TaskManager::ClockTool(double &record,double timeout)
 {
 	 double NowTime = Time();
@@ -51,6 +57,7 @@ bool TaskManager::ClockTool(double &record,double timeout)
 		else
 			return false;
 }
+
 
 //SysTick interrupt IRQ handler
 extern "C"
