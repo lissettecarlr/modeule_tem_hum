@@ -119,6 +119,7 @@ bool WifiMemory::LoadSaveInfo()
 			pageNumber=0;
 			Pointer=0;
 			PointerPage=1;
+			UpdataSaveInfo();
 			return false;
 		}
 		else{

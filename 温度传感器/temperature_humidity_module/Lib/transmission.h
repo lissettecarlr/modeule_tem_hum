@@ -33,8 +33,9 @@ class Transmission{
 	
 		u8 GetStateOrder(USART &ListeningCOM);//监听某个端口 返回命令字节
 
-		void SendOnce(u8 data1,u8 data2,u8 data3,u8 data4,u8 Voltage,esp8266 &esp);
-	
+		void SendClient(u8 data1,u8 data2,u8 data3,u8 data4,u8 Voltage,esp8266 &esp);
+		void SendServer(u8 data1,u8 data2,u8 data3,u8 data4,u8 Voltage,esp8266 &esp);
+		void SendAlive(esp8266 &esp,bool mode); //true: send server   false send client
 	
 };
 

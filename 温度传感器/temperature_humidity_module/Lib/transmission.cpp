@@ -225,15 +225,32 @@ u8 Transmission::GetStateOrder(USART &ListeningCOM)
 }
 
 //发送数据给上位机
-void Transmission::SendOnce(u8 data1,u8 data2,u8 data3,u8 data4,u8 Voltage,esp8266 &esp)
+void Transmission::SendServer(u8 data1,u8 data2,u8 data3,u8 data4,u8 Voltage,esp8266 &esp)
 {
 				esp.Send(20,humidityModuleToUser(data1,data2,Voltage));
 				tskmgr.DelayMs(1000);//如果不延时，下一条将发送不出去
 				tskmgr.DelayMs(1000);
 				esp.Send(20,temperetureModuleToUser(data3,data4,Voltage));
-//				usart.SendData((humidityModuleToUser(data1,data2,Voltage)),20);			
-//				usart.SendData((temperetureModuleToUser(data3,data4,Voltage)),20);
+//			usart.SendData((humidityModuleToUser(data1,data2,Voltage)),20);			
+//			usart.SendData((temperetureModuleToUser(data3,data4,Voltage)),20);
 }
 
+void Transmission::SendClient(u8 data1,u8 data2,u8 data3,u8 data4,u8 Voltage,esp8266 &esp)
+{
+				esp.Send(0,20,humidityModuleToUser(data1,data2,Voltage));
+				tskmgr.DelayMs(1000);//如果不延时，下一条将发送不出去
+				tskmgr.DelayMs(1000);
+				esp.Send(0,20,temperetureModuleToUser(data3,data4,Voltage));
+}
 
-
+void Transmission::SendAlive(esp8266 &esp,bool mode)
+{
+	if(mode)
+	{
+		esp.Send(20,humidityModuleToUser(0xff,0xff,0xff));
+	}
+	else
+	{
+		esp.Send(0,20,humidityModuleToUser(0xff,0xff,0xff));
+	}
+}
