@@ -40,7 +40,7 @@ AM2302  ESP8266
 
 #define MODULE_IP 			"192.168.1.1"   
 #define MODULE_COM			9000
-#define SERVER_IP				"119.84.176.136"                          //"120.27.119.115"
+#define SERVER_IP				"113.250.110.241"                          //"120.27.119.115"
 #define SERVER_COM 			1111
 /*END********************************************************/
 
@@ -70,7 +70,6 @@ int main(){
 	double record_alive=0;
 	double record_getwifi=0;
 	bool network=false ; //网络连接标识位 
-//	bool WifiMode=false; //wifi模式标识，true 为连接服务器
 	char *ip = (char*)calloc(15, sizeof(char*) ); 
 	char *WifiName = (char*)calloc(20, sizeof(char*) ); 
 	char *WifiPassword = (char*)calloc(20, sizeof(char*) ); 
@@ -95,13 +94,20 @@ int main(){
 	Led.SetLevel(1);//将指示灯熄灭（模式切换结束）
 /*END*********************************************************************************/	
 	
-
+/*Hint********************************************************************************/
+	if(!network)
+		Hint.ledFlicker_2s();
+	
+	
+/*END********************************************************************************/	
+	
 	while(1)
 	{		
 		order=CMCT_Tool.GetStateOrder(WIFI);
 		switch(order)
 		{
 			case DELAY:{}break;
+	/*启动********************************************************************************************/
 			case START:{//启动
 				while(1){
 							if(tskmgr.ClockTool(record_updataSensor,3)) //每三秒执行一次更新
@@ -116,11 +122,18 @@ int main(){
 							break;					
 				}
 			}break;
+	/*END********************************************************************************************/
+			
+	/*复位******************************************************************************************/
 			case RESET:{//复位
 					wifimemory.ClearAllData(); //清空所有保存信息
 					*((u32 *)0xE000ED0C) = 0x05fa0004;
 			}break;
+	/*END******************************************************************************************/
+			
+	/*获取WIFI信息*********************************************************************************/		
 			case GETWIFI:{//得到wifi账号密码
+				record_getwifi=tskmgr.Time();
 					while(1)
 					{
 						if(GetWifiNameAndPassword(WifiName,WifiPassword,WIFI) )
@@ -129,21 +142,29 @@ int main(){
 								com<<WifiName<<"\t"<<WifiPassword<<"\n";
 								break;
 						}
-						if(tskmgr.ClockTool(record_getwifi,10)) //超时10秒退出
+						if(tskmgr.ClockTool(record_getwifi,30)) //超时10秒退出
 						   break;
 					}
 			}break;
+	/*END******************************************************************************************/
+			
+	/*模式切换*************************************************************************************/
 			case MODEL:{//模式切换
 					ConnectNetwork_server(MODULE_COM,0);
 					network=false;
 			}break;
+	/*END******************************************************************************************/
+
+	/*存活确认*************************************************************************************/			
 			case ALIVE:{//存活确认
 				if(network)
 					CMCT_Tool.SendAlive(wifi,1); //存活确认，数据位全为0xff
 				else
 					CMCT_Tool.SendAlive(wifi,0);
 			}break;			
+	/*END******************************************************************************************/
 			
+	/*常态******************************************************************************************/
 			default:		
 			{  
 					if(tskmgr.ClockTool(record_updataSensor,3)) //每三秒执行一次更新
@@ -156,6 +177,7 @@ int main(){
 							CMCT_Tool.SendAlive(wifi,0);
 					}
 			}
+	/*END******************************************************************************************/
 		}		
 	}
 }
@@ -164,19 +186,18 @@ bool GetWifiNameAndPassword(char *name,char *password,USART &ListeningCOM)
 {
 		u8 ch=0;
 		u8 i =0;
-		u8 num = ListeningCOM.ReceiveBufferSize();
-		if(num>7)   //一帧命令包含8个字节
-		{
-				ListeningCOM.GetReceivedData(&ch,1);
+		ListeningCOM.GetReceivedData(&ch,1);
 			if(ch == 0xFF)
 			{
+				tskmgr.DelayMs(100);
 				ListeningCOM.GetReceivedData(&ch,1);
 				if(ch == 0x03)
 				{
+					ListeningCOM.GetReceivedData(&ch,1);
 					while(ch!=0xff){
-						ListeningCOM.GetReceivedData(&ch,1);
 						*(name+i)=ch;
 						i++;
+						ListeningCOM.GetReceivedData(&ch,1);
 					}
 						*(name+i)='\0';
 						ListeningCOM.GetReceivedData(&ch,1);
@@ -193,9 +214,7 @@ bool GetWifiNameAndPassword(char *name,char *password,USART &ListeningCOM)
 			}
 			else
 				return 0;
-		}
-		else 
-			return 0;
+
 }
 
 u8 ConnectNetwork_client(char *WifiName,char* WifiPassword,char *IP,int COM) //预计耗时26秒
@@ -209,9 +228,7 @@ u8 ConnectNetwork_client(char *WifiName,char* WifiPassword,char *IP,int COM) //�
 	wifi.setOprToStation();//设置为模式1
 	tskmgr.DelayMs(500);
 	wifi.restart();
-	tskmgr.DelayMs(1000);
-	tskmgr.DelayMs(1000);
-	tskmgr.DelayMs(1000);
+	tskmgr.DelayS(3);
 	if(!wifi.joinAP(WifiName,WifiPassword))
 		return 0;//WIFI连接 如果连接失败，返回0
 	if( !wifi.ConnectServer("TCP",IP,COM) ) return false;  //服务器连接
@@ -226,9 +243,7 @@ u8 ConnectNetwork_server(int port,int time) //预计耗时7秒
 	wifi.setOprToSoftAP();
 	tskmgr.DelayMs(500);
 	wifi.restart();
-	tskmgr.DelayMs(1000);
-	tskmgr.DelayMs(1000);
-	tskmgr.DelayMs(1000);
+	tskmgr.DelayS(3);
 	wifi.enableOrDisableMUX(1); //开启多路访问
 	tskmgr.DelayMs(1000);
 	wifi.OpenServer(port);
@@ -259,14 +274,7 @@ u8 ConnectNetwork_server(int port,int time) //预计耗时7秒
 //	InfoStore.Read(0,20,&b,1);//读取IP
 
 
-#define DELAY 					0x01
-#define START 					0x02
-#define GETWIFI					0x03
-#define REGISTER 				0xaa
-#define BEEP 						0xBB
-#define RESET 					0XCC
-#define MODEL 					0xEE
-#define ALIVE 					0xff
+
 /*
 测试命令数据
 
@@ -275,40 +283,8 @@ u8 ConnectNetwork_server(int port,int time) //预计耗时7秒
 发送数据：ff dd 00 00 00 01 02 DF
 存活确认：ff dd 00 00 00 01 ff DC
 
+WIFI信息  ff 03 46 46 46 ff 66 31 39 39 34 30 32 30 32 ff
 */
 
-//test procedure
 
-
-//	char *str1 = "FFF";//3
-//	char *str2 = "f19940202";//9
-//	char *str3 = "fzj";//3
-//	char *str4 = "hahahahahaha";//9
-
-//u8 ch;
-//while(1)
-//{
-//		u8 num = com.ReceiveBufferSize();
-//		if(num>=1)
-//		{
-//				com.GetReceivedData(&ch,1);
-//				com.ClearReceiveBuffer();
-//			switch (ch)
-//			{
-//				case 1:{wifimemory.ClearAllData();com<<"clear!!\n";}break;
-//				case 2:{wifimemory.Save(str1,str2);com<<"Save1\n";}break;
-//				case 3:{wifimemory.Save(str3,str4);com<<"Save2\n";}break;
-//				case 4:{
-//									if(wifimemory.Load(strA,strB))
-//									{
-//										com<<strA<<"\n";
-//										com<<strB<<"\n";
-//									}
-//									else
-//											com<<"No data\n";
-//							}break;
-//			}
-//		}
-//	
-//}
 

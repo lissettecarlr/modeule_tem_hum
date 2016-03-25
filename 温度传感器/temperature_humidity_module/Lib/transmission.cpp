@@ -19,10 +19,10 @@ u8 *Transmission::humidityModuleToModule(u8 data1,u8 data2,u8 adc)
 	ModuleToModule[1]=0xcc;
 	
 	//设备号
-	ModuleToModule[2]=0x00;
-	ModuleToModule[3]=0x00;
-	ModuleToModule[4]=0x00;
-	ModuleToModule[5]=0x01;
+	ModuleToModule[2]=ModuleNuber>>24;
+	ModuleToModule[3]=(ModuleNuber>>16) &0xff;
+	ModuleToModule[4]=(ModuleNuber>>8) 	&0xff;
+	ModuleToModule[5]=(ModuleNuber)			&0xff;
 	//类型
 	ModuleToModule[6]=HumidityNumber;
 	//数据
@@ -46,10 +46,10 @@ u8 *Transmission::temperatureModuleToModule(u8 data1,u8 data2,u8 adc)
 	ModuleToModule[1]=0xcc;
 	
 	//设备号
-	ModuleToModule[2]=0x00;
-	ModuleToModule[3]=0x00;
-	ModuleToModule[4]=0x00;
-	ModuleToModule[5]=0x01;
+	ModuleToModule[2]=ModuleNuber>>24;
+	ModuleToModule[3]=(ModuleNuber>>16) &0xff;
+	ModuleToModule[4]=(ModuleNuber>>8) 	&0xff;
+	ModuleToModule[5]=(ModuleNuber)			&0xff;
 	//类型
 	ModuleToModule[6]=TemperatureNumber;
 	//数据
@@ -74,10 +74,10 @@ u8 *Transmission::humidityModuleToUser(u8 data1,u8 data2,u8 adc)
 	ModuleToUser[0]=0xff;
 	ModuleToUser[1]=0xaa;
 	//设备号
-	ModuleToUser[2]=0x00;
-	ModuleToUser[3]=0x00;
-	ModuleToUser[4]=0x00;
-	ModuleToUser[5]=0x01;
+	ModuleToUser[2]=ModuleNuber>>24;
+	ModuleToUser[3]=(ModuleNuber>>16) &0xff;
+	ModuleToUser[4]=(ModuleNuber>>8) 	&0xff;
+	ModuleToUser[5]=(ModuleNuber)			&0xff;
 	//数据类型
 	ModuleToUser[6]=HumidityNumber;
 	//数据
@@ -99,10 +99,10 @@ u8 *Transmission::temperetureModuleToUser(u8 data1,u8 data2,u8 adc)
 	ModuleToUser[0]=0xff;
 	ModuleToUser[1]=0xaa;
 	//设备号
-	ModuleToUser[2]=0x00;
-	ModuleToUser[3]=0x00;
-	ModuleToUser[4]=0x00;
-	ModuleToUser[5]=0x01;
+	ModuleToUser[2]=ModuleNuber>>24;
+	ModuleToUser[3]=(ModuleNuber>>16) &0xff;
+	ModuleToUser[4]=(ModuleNuber>>8) 	&0xff;
+	ModuleToUser[5]=(ModuleNuber)			&0xff;
 	//数据类型
 	ModuleToUser[6]=TemperatureNumber;
 	//数据
@@ -124,12 +124,12 @@ u8 *Transmission::CO2_ModuleToUser(u8 data1,u8 data2,u8 adc)
 	ModuleToUser[0]=0xff;
 	ModuleToUser[1]=0xaa;
 	//设备号
-	ModuleToUser[2]=0x00;
-	ModuleToUser[3]=0x00;
-	ModuleToUser[4]=0x00;
-	ModuleToUser[5]=0x02;
+	ModuleToUser[2]=ModuleNuber>>24;
+	ModuleToUser[3]=(ModuleNuber>>16) &0xff;
+	ModuleToUser[4]=(ModuleNuber>>8) 	&0xff;
+	ModuleToUser[5]=(ModuleNuber)			&0xff;
 	//数据类型
-	ModuleToUser[6]=3;
+	ModuleToUser[6]=CO2Number;
 	//数据
 	ModuleToUser[7]=data1;
 	ModuleToUser[8]=data2;
@@ -150,12 +150,12 @@ u8 *Transmission::CO2_ModuleToModule(u8 data1,u8 data2,u8 adc)
 	ModuleToModule[1]=0xcc;
 	
 	//设备号
-	ModuleToModule[2]=0x00;
-	ModuleToModule[3]=0x00;
-	ModuleToModule[4]=0x00;
-	ModuleToModule[5]=0x02;
+	ModuleToModule[2]=ModuleNuber>>24;
+	ModuleToModule[3]=(ModuleNuber>>16) &0xff;
+	ModuleToModule[4]=(ModuleNuber>>8) 	&0xff;
+	ModuleToModule[5]=(ModuleNuber)			&0xff;
 	//类型
-	ModuleToModule[6]=3;
+	ModuleToModule[6]=CO2Number;
 	//数据
 	ModuleToModule[7]=data1;
 	ModuleToModule[8]=data2;
@@ -168,6 +168,7 @@ u8 *Transmission::CO2_ModuleToModule(u8 data1,u8 data2,u8 adc)
 	}
 	return ModuleToModule;
 }
+
 
 
 

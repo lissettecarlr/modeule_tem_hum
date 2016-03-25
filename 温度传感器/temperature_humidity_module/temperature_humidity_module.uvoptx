@@ -176,9 +176,9 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>111</LineNumber>
+          <LineNumber>181</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134228724</Address>
+          <Address>134221974</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -192,9 +192,9 @@
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
-          <LineNumber>116</LineNumber>
+          <LineNumber>134</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134228770</Address>
+          <Address>134228914</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
@@ -203,46 +203,88 @@
           <BreakIfRCount>1</BreakIfRCount>
           <Filename>E:\project\SMT32F1_PRO\pro_git\T_H_Module\娓╁害浼犳劅鍣?temperature_humidity_module\main.cpp</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\temperature_humidity_module\main.cpp\116</Expression>
+          <Expression>\\temperature_humidity_module\main.cpp\134</Expression>
+        </Bp>
+        <Bp>
+          <Number>2</Number>
+          <Type>0</Type>
+          <LineNumber>131</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134228898</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>E:\project\SMT32F1_PRO\pro_git\T_H_Module\娓╁害浼犳劅鍣?temperature_humidity_module\main.cpp</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\temperature_humidity_module\main.cpp\131</Expression>
+        </Bp>
+        <Bp>
+          <Number>3</Number>
+          <Type>0</Type>
+          <LineNumber>177</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134221956</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>E:\project\SMT32F1_PRO\pro_git\T_H_Module\娓╁害浼犳劅鍣?temperature_humidity_module\main.cpp</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\temperature_humidity_module\main.cpp\177</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
         <Ww>
           <count>0</count>
           <WinNumber>1</WinNumber>
-          <ItemText>DELAY</ItemText>
+          <ItemText>ch</ItemText>
+        </Ww>
+        <Ww>
+          <count>1</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>name</ItemText>
+        </Ww>
+        <Ww>
+          <count>2</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>i</ItemText>
         </Ww>
       </WatchWindow1>
       <WatchWindow2>
         <Ww>
           <count>0</count>
           <WinNumber>2</WinNumber>
-          <ItemText>order</ItemText>
+          <ItemText>ch</ItemText>
         </Ww>
         <Ww>
           <count>1</count>
           <WinNumber>2</WinNumber>
-          <ItemText>record_updataSensor</ItemText>
+          <ItemText>change</ItemText>
         </Ww>
         <Ww>
           <count>2</count>
           <WinNumber>2</WinNumber>
-          <ItemText>record_alive</ItemText>
+          <ItemText>name</ItemText>
         </Ww>
         <Ww>
           <count>3</count>
           <WinNumber>2</WinNumber>
-          <ItemText>NowTime</ItemText>
+          <ItemText>ch</ItemText>
         </Ww>
         <Ww>
           <count>4</count>
           <WinNumber>2</WinNumber>
-          <ItemText>record</ItemText>
+          <ItemText>change</ItemText>
         </Ww>
         <Ww>
           <count>5</count>
           <WinNumber>2</WinNumber>
-          <ItemText>NowTime - record</ItemText>
+          <ItemText>order</ItemText>
         </Ww>
         <Ww>
           <count>6</count>
@@ -252,52 +294,52 @@
         <Ww>
           <count>7</count>
           <WinNumber>2</WinNumber>
-          <ItemText>NowTime</ItemText>
+          <ItemText>record_alive</ItemText>
         </Ww>
         <Ww>
           <count>8</count>
           <WinNumber>2</WinNumber>
-          <ItemText>OriginalData</ItemText>
+          <ItemText>NowTime</ItemText>
         </Ww>
         <Ww>
           <count>9</count>
           <WinNumber>2</WinNumber>
-          <ItemText>lenth</ItemText>
+          <ItemText>record</ItemText>
         </Ww>
         <Ww>
           <count>10</count>
           <WinNumber>2</WinNumber>
-          <ItemText>name</ItemText>
+          <ItemText>NowTime - record</ItemText>
         </Ww>
         <Ww>
           <count>11</count>
           <WinNumber>2</WinNumber>
-          <ItemText>password</ItemText>
+          <ItemText>record_updataSensor</ItemText>
         </Ww>
         <Ww>
           <count>12</count>
           <WinNumber>2</WinNumber>
-          <ItemText>lenth</ItemText>
+          <ItemText>NowTime</ItemText>
         </Ww>
         <Ww>
           <count>13</count>
           <WinNumber>2</WinNumber>
-          <ItemText>name</ItemText>
+          <ItemText>OriginalData</ItemText>
         </Ww>
         <Ww>
           <count>14</count>
           <WinNumber>2</WinNumber>
-          <ItemText>Pointer</ItemText>
+          <ItemText>lenth</ItemText>
         </Ww>
         <Ww>
           <count>15</count>
           <WinNumber>2</WinNumber>
-          <ItemText>password</ItemText>
+          <ItemText>name</ItemText>
         </Ww>
         <Ww>
           <count>16</count>
           <WinNumber>2</WinNumber>
-          <ItemText>PointerPage</ItemText>
+          <ItemText>password</ItemText>
         </Ww>
         <Ww>
           <count>17</count>
@@ -307,112 +349,112 @@
         <Ww>
           <count>18</count>
           <WinNumber>2</WinNumber>
-          <ItemText>nowPageLenth</ItemText>
+          <ItemText>name</ItemText>
         </Ww>
         <Ww>
           <count>19</count>
           <WinNumber>2</WinNumber>
-          <ItemText>occupancy</ItemText>
+          <ItemText>Pointer</ItemText>
         </Ww>
         <Ww>
           <count>20</count>
           <WinNumber>2</WinNumber>
-          <ItemText>occupancy</ItemText>
+          <ItemText>password</ItemText>
         </Ww>
         <Ww>
           <count>21</count>
           <WinNumber>2</WinNumber>
-          <ItemText>Sum</ItemText>
+          <ItemText>PointerPage</ItemText>
         </Ww>
         <Ww>
           <count>22</count>
           <WinNumber>2</WinNumber>
-          <ItemText>pageNumber</ItemText>
+          <ItemText>lenth</ItemText>
         </Ww>
         <Ww>
           <count>23</count>
           <WinNumber>2</WinNumber>
-          <ItemText>nowPage</ItemText>
+          <ItemText>nowPageLenth</ItemText>
         </Ww>
         <Ww>
           <count>24</count>
           <WinNumber>2</WinNumber>
-          <ItemText>LenthSum</ItemText>
+          <ItemText>occupancy</ItemText>
         </Ww>
         <Ww>
           <count>25</count>
           <WinNumber>2</WinNumber>
-          <ItemText>Lenth1</ItemText>
+          <ItemText>occupancy</ItemText>
         </Ww>
         <Ww>
           <count>26</count>
           <WinNumber>2</WinNumber>
-          <ItemText>Lenth2</ItemText>
+          <ItemText>Sum</ItemText>
         </Ww>
         <Ww>
           <count>27</count>
           <WinNumber>2</WinNumber>
-          <ItemText>Lenth1</ItemText>
+          <ItemText>pageNumber</ItemText>
         </Ww>
         <Ww>
           <count>28</count>
           <WinNumber>2</WinNumber>
-          <ItemText>Lenth2</ItemText>
+          <ItemText>nowPage</ItemText>
         </Ww>
         <Ww>
           <count>29</count>
           <WinNumber>2</WinNumber>
-          <ItemText>occupancy</ItemText>
+          <ItemText>LenthSum</ItemText>
         </Ww>
         <Ww>
           <count>30</count>
           <WinNumber>2</WinNumber>
-          <ItemText>pageNumber</ItemText>
+          <ItemText>Lenth1</ItemText>
         </Ww>
         <Ww>
           <count>31</count>
           <WinNumber>2</WinNumber>
-          <ItemText>Lenth</ItemText>
+          <ItemText>Lenth2</ItemText>
         </Ww>
         <Ww>
           <count>32</count>
           <WinNumber>2</WinNumber>
-          <ItemText>a</ItemText>
+          <ItemText>Lenth1</ItemText>
         </Ww>
         <Ww>
           <count>33</count>
           <WinNumber>2</WinNumber>
-          <ItemText>command</ItemText>
+          <ItemText>Lenth2</ItemText>
         </Ww>
         <Ww>
           <count>34</count>
           <WinNumber>2</WinNumber>
-          <ItemText>num</ItemText>
+          <ItemText>occupancy</ItemText>
         </Ww>
         <Ww>
           <count>35</count>
           <WinNumber>2</WinNumber>
-          <ItemText>ch</ItemText>
+          <ItemText>pageNumber</ItemText>
         </Ww>
         <Ww>
           <count>36</count>
           <WinNumber>2</WinNumber>
-          <ItemText>comand</ItemText>
+          <ItemText>Lenth</ItemText>
         </Ww>
         <Ww>
           <count>37</count>
           <WinNumber>2</WinNumber>
-          <ItemText>num</ItemText>
+          <ItemText>a</ItemText>
         </Ww>
         <Ww>
           <count>38</count>
           <WinNumber>2</WinNumber>
-          <ItemText>ch</ItemText>
+          <ItemText>command</ItemText>
         </Ww>
         <Ww>
           <count>39</count>
           <WinNumber>2</WinNumber>
-          <ItemText>ch</ItemText>
+          <ItemText>num</ItemText>
         </Ww>
         <Ww>
           <count>40</count>
@@ -427,72 +469,72 @@
         <Ww>
           <count>42</count>
           <WinNumber>2</WinNumber>
-          <ItemText>ch</ItemText>
+          <ItemText>num</ItemText>
         </Ww>
         <Ww>
           <count>43</count>
           <WinNumber>2</WinNumber>
-          <ItemText>ListeningCOM.ReceiveBufferSize()</ItemText>
+          <ItemText>ch</ItemText>
         </Ww>
         <Ww>
           <count>44</count>
           <WinNumber>2</WinNumber>
-          <ItemText>check</ItemText>
+          <ItemText>ch</ItemText>
         </Ww>
         <Ww>
           <count>45</count>
           <WinNumber>2</WinNumber>
-          <ItemText>sum</ItemText>
+          <ItemText>ch</ItemText>
         </Ww>
         <Ww>
           <count>46</count>
           <WinNumber>2</WinNumber>
-          <ItemText>OriginalData</ItemText>
+          <ItemText>comand</ItemText>
         </Ww>
         <Ww>
           <count>47</count>
           <WinNumber>2</WinNumber>
-          <ItemText>OriginalData</ItemText>
+          <ItemText>ch</ItemText>
         </Ww>
         <Ww>
           <count>48</count>
           <WinNumber>2</WinNumber>
-          <ItemText>state_now</ItemText>
+          <ItemText>ListeningCOM.ReceiveBufferSize()</ItemText>
         </Ww>
         <Ww>
           <count>49</count>
           <WinNumber>2</WinNumber>
-          <ItemText>COMANDS</ItemText>
+          <ItemText>check</ItemText>
         </Ww>
         <Ww>
           <count>50</count>
           <WinNumber>2</WinNumber>
-          <ItemText>a</ItemText>
+          <ItemText>sum</ItemText>
         </Ww>
         <Ww>
           <count>51</count>
           <WinNumber>2</WinNumber>
-          <ItemText>COMANDS</ItemText>
+          <ItemText>OriginalData</ItemText>
         </Ww>
         <Ww>
           <count>52</count>
           <WinNumber>2</WinNumber>
-          <ItemText>a</ItemText>
+          <ItemText>OriginalData</ItemText>
         </Ww>
         <Ww>
           <count>53</count>
           <WinNumber>2</WinNumber>
-          <ItemText>a</ItemText>
+          <ItemText>state_now</ItemText>
         </Ww>
         <Ww>
           <count>54</count>
           <WinNumber>2</WinNumber>
-          <ItemText>sum</ItemText>
+          <ItemText>COMANDS</ItemText>
         </Ww>
         <Ww>
           <count>55</count>
           <WinNumber>2</WinNumber>
-          <ItemText>command</ItemText>
+          <ItemText>a</ItemText>
         </Ww>
         <Ww>
           <count>56</count>
@@ -502,12 +544,12 @@
         <Ww>
           <count>57</count>
           <WinNumber>2</WinNumber>
-          <ItemText>sum</ItemText>
+          <ItemText>a</ItemText>
         </Ww>
         <Ww>
           <count>58</count>
           <WinNumber>2</WinNumber>
-          <ItemText>comand</ItemText>
+          <ItemText>a</ItemText>
         </Ww>
         <Ww>
           <count>59</count>
@@ -517,25 +559,50 @@
         <Ww>
           <count>60</count>
           <WinNumber>2</WinNumber>
-          <ItemText>DHT22_data</ItemText>
+          <ItemText>command</ItemText>
         </Ww>
         <Ww>
           <count>61</count>
           <WinNumber>2</WinNumber>
-          <ItemText>check</ItemText>
+          <ItemText>COMANDS</ItemText>
         </Ww>
         <Ww>
           <count>62</count>
           <WinNumber>2</WinNumber>
-          <ItemText>DHT22_data</ItemText>
+          <ItemText>sum</ItemText>
         </Ww>
         <Ww>
           <count>63</count>
           <WinNumber>2</WinNumber>
-          <ItemText>DHT22_data</ItemText>
+          <ItemText>comand</ItemText>
         </Ww>
         <Ww>
           <count>64</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>sum</ItemText>
+        </Ww>
+        <Ww>
+          <count>65</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>DHT22_data</ItemText>
+        </Ww>
+        <Ww>
+          <count>66</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>check</ItemText>
+        </Ww>
+        <Ww>
+          <count>67</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>DHT22_data</ItemText>
+        </Ww>
+        <Ww>
+          <count>68</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>DHT22_data</ItemText>
+        </Ww>
+        <Ww>
+          <count>69</count>
           <WinNumber>2</WinNumber>
           <ItemText>oldTime</ItemText>
         </Ww>
