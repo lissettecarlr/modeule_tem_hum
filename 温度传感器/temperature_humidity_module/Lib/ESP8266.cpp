@@ -336,3 +336,41 @@ bool esp8266::SetIpAddr(char* str) //设置IP地址
 			return false;
 }
 
+/*******************************************************************************************/
+u8 esp8266::ConnectNetwork_client(char *WifiName,char* WifiPassword,char *IP,int COM) //预计耗时26秒
+{
+	//网络连接
+	if(!kick())
+		return 0;
+	tskmgr.DelayMs(1000);
+	setEcho(1);//回显
+	tskmgr.DelayMs(1000);
+	setOprToStation();//设置为模式1
+	tskmgr.DelayMs(500);
+	restart();
+	tskmgr.DelayS(3);
+	if(!joinAP(WifiName,WifiPassword))
+		return 0;//WIFI连接 如果连接失败，返回0
+	if( !ConnectServer("TCP",IP,COM) ) return false;  //服务器连接
+	return 1;
+}
+
+u8 esp8266::ConnectNetwork_server(int port,int time) //预计耗时7秒
+{
+	if(!kick())
+		return 0;
+	tskmgr.DelayMs(1000);
+	setOprToSoftAP();
+	tskmgr.DelayMs(500);
+	restart();
+	tskmgr.DelayS(3);
+	enableOrDisableMUX(1); //开启多路访问
+	tskmgr.DelayMs(1000);
+	OpenServer(port);
+	tskmgr.DelayMs(1000);
+	SetTimeout(time);
+	tskmgr.DelayMs(1000);
+	return 1;
+}
+
+

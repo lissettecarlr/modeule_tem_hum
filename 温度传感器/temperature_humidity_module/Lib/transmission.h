@@ -12,7 +12,7 @@
 #define DustNumber 				0x04
 #define HCHONumber				0x05
 
-#define ModuleNuber       0x12345678
+#define ModuleNuber       0x00000001
 
 /*END*****************************************************/
 
@@ -25,6 +25,9 @@ class Transmission{
 		u8 ModuleToUser[20];
 	public:
 		Transmission();
+	
+	  u8 *ToServerPack(u8 DataType,u8 DataH,u8 DataL,u8 adc);
+		u8 *ToClientPack(u8 DataType,u8 DataH,u8 DataL,u8 adc);
 	
 	//温湿度模块数据封装
 		u8 *humidityModuleToModule(u8 data1,u8 data2,u8 adc); //to client
@@ -51,7 +54,9 @@ class Transmission{
 
 		void SendClient(u8 data1,u8 data2,u8 data3,u8 data4,u8 Voltage,esp8266 &esp); //发送给客服端
 		void SendServer(u8 data1,u8 data2,u8 data3,u8 data4,u8 Voltage,esp8266 &esp); //发送给服务器
-		void SendAlive(esp8266 &esp,bool mode); //true: send server   false send client
+		void SendAlive(esp8266 &esp,u8 DataType,bool mode); //true: send server   false send client
+		
+		bool GetWifiNameAndPassword(char *name,char *password,USART &ListeningCOM);
 	
 };
 

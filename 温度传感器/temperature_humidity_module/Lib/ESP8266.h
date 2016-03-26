@@ -36,6 +36,9 @@ class esp8266
 	
 		bool SetIpAddr(char* str); //设置IP地址
    		
+	//指令集
+	u8 ConnectNetwork_client(char *WifiName,char* WifiPassword,char *IP,int COM); //连接服务器
+	u8 ConnectNetwork_server(int port,int time);//作为服务器
 	
 	private:
 		USART &mUsart;

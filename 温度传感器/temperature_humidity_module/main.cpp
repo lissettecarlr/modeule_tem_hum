@@ -44,10 +44,6 @@ AM2302  ESP8266
 #define SERVER_COM 			1111
 /*END********************************************************/
 
-u8 ConnectNetwork_client(char *WifiName,char* WifiPassword,char *IP,int COM);
-u8 ConnectNetwork_server(int port,int time);
-bool GetWifiNameAndPassword(char *name,char *password,USART &ListeningCOM);
-
 
 USART com(1,115200,true);   //USART1
 USART WIFI(3,115200,true);   //USART3
@@ -62,6 +58,7 @@ AM2302 am2302;
 esp8266 wifi(WIFI);
 
 hint Hint(Led,Beep);
+
 
 int main(){
 	
@@ -80,15 +77,18 @@ int main(){
 	{
 		while( wifimemory.Load(WifiName,WifiPassword) )
 		 {
-			  if(ConnectNetwork_client(WifiName,WifiPassword,SERVER_IP,1111)) //每次连接历时20秒
+			  if(wifi.ConnectNetwork_client(WifiName,WifiPassword,SERVER_IP,1111)) //每次连接历时20秒
 				{network=true;   break;}
 		 }
-		 if(network ==false) 
-			  ConnectNetwork_server(MODULE_COM,0);
+		 if(network ==false) {
+			  wifi.ConnectNetwork_server(MODULE_COM,0);
+			 	WIFI.ClearReceiveBuffer();
+		 }
 	}
   else
 	{
-		 ConnectNetwork_server(MODULE_COM,0);
+		 wifi.ConnectNetwork_server(MODULE_COM,0);
+			WIFI.ClearReceiveBuffer();
 	}
 	
 	Led.SetLevel(1);//将指示灯熄灭（模式切换结束）
@@ -114,7 +114,12 @@ int main(){
 							{
 								am2302.Updata();
 								if(am2302.NewDataFlag == true){
-									CMCT_Tool.SendServer(am2302.DHT22_data[0],am2302.DHT22_data[1],am2302.DHT22_data[2],am2302.DHT22_data[3],0,wifi);
+									
+									if(network)
+										CMCT_Tool.SendServer(am2302.DHT22_data[0],am2302.DHT22_data[1],am2302.DHT22_data[2],am2302.DHT22_data[3],0,wifi);
+									else
+										CMCT_Tool.SendClient(am2302.DHT22_data[0],am2302.DHT22_data[1],am2302.DHT22_data[2],am2302.DHT22_data[3],0,wifi);	
+									
 									am2302.NewDataFlag=false ; //更改新数据标识位		
 								}
 							}
@@ -136,7 +141,7 @@ int main(){
 				record_getwifi=tskmgr.Time();
 					while(1)
 					{
-						if(GetWifiNameAndPassword(WifiName,WifiPassword,WIFI) )
+						if(CMCT_Tool.GetWifiNameAndPassword(WifiName,WifiPassword,WIFI) )
 						{
 								//保存WIFI账号密码
 								com<<WifiName<<"\t"<<WifiPassword<<"\n";
@@ -150,7 +155,8 @@ int main(){
 			
 	/*模式切换*************************************************************************************/
 			case MODEL:{//模式切换
-					ConnectNetwork_server(MODULE_COM,0);
+					wifi.ConnectNetwork_server(MODULE_COM,0);
+					WIFI.ClearReceiveBuffer();
 					network=false;
 			}break;
 	/*END******************************************************************************************/
@@ -158,9 +164,9 @@ int main(){
 	/*存活确认*************************************************************************************/			
 			case ALIVE:{//存活确认
 				if(network)
-					CMCT_Tool.SendAlive(wifi,1); //存活确认，数据位全为0xff
+					CMCT_Tool.SendAlive(wifi,HumidityNumber,1); //存活确认，数据位全为0xff
 				else
-					CMCT_Tool.SendAlive(wifi,0);
+					CMCT_Tool.SendAlive(wifi,HumidityNumber,0);
 			}break;			
 	/*END******************************************************************************************/
 			
@@ -172,89 +178,15 @@ int main(){
 					if(tskmgr.ClockTool(record_alive,60)) //每60秒发送一次存活确认
 					{
 						if(network)
-							CMCT_Tool.SendAlive(wifi,1);
+							CMCT_Tool.SendAlive(wifi,HumidityNumber,1);
 						else
-							CMCT_Tool.SendAlive(wifi,0);
+							CMCT_Tool.SendAlive(wifi,HumidityNumber,0);
 					}
 			}
 	/*END******************************************************************************************/
 		}		
 	}
 }
-
-bool GetWifiNameAndPassword(char *name,char *password,USART &ListeningCOM)
-{
-		u8 ch=0;
-		u8 i =0;
-		ListeningCOM.GetReceivedData(&ch,1);
-			if(ch == 0xFF)
-			{
-				tskmgr.DelayMs(100);
-				ListeningCOM.GetReceivedData(&ch,1);
-				if(ch == 0x03)
-				{
-					ListeningCOM.GetReceivedData(&ch,1);
-					while(ch!=0xff){
-						*(name+i)=ch;
-						i++;
-						ListeningCOM.GetReceivedData(&ch,1);
-					}
-						*(name+i)='\0';
-						ListeningCOM.GetReceivedData(&ch,1);
-						i=0;
-					while(ch!=0xff){
-						*(password+i)=ch;
-						i++;
-						ListeningCOM.GetReceivedData(&ch,1);
-					}
-						*(password+i)='\0';	
-					return 1;
-				}
-				else return 0;
-			}
-			else
-				return 0;
-
-}
-
-u8 ConnectNetwork_client(char *WifiName,char* WifiPassword,char *IP,int COM) //预计耗时26秒
-{
-	//网络连接
-	if(!wifi.kick())
-		return 0;
-	tskmgr.DelayMs(1000);
-	wifi.setEcho(1);//回显
-	tskmgr.DelayMs(1000);
-	wifi.setOprToStation();//设置为模式1
-	tskmgr.DelayMs(500);
-	wifi.restart();
-	tskmgr.DelayS(3);
-	if(!wifi.joinAP(WifiName,WifiPassword))
-		return 0;//WIFI连接 如果连接失败，返回0
-	if( !wifi.ConnectServer("TCP",IP,COM) ) return false;  //服务器连接
-	return 1;
-}
-
-u8 ConnectNetwork_server(int port,int time) //预计耗时7秒
-{
-	if(!wifi.kick())
-		return 0;
-	tskmgr.DelayMs(1000);
-	wifi.setOprToSoftAP();
-	tskmgr.DelayMs(500);
-	wifi.restart();
-	tskmgr.DelayS(3);
-	wifi.enableOrDisableMUX(1); //开启多路访问
-	tskmgr.DelayMs(1000);
-	wifi.OpenServer(port);
-	tskmgr.DelayMs(1000);
-	wifi.SetTimeout(time);
-	tskmgr.DelayMs(1000);
-	WIFI.ClearReceiveBuffer();
-	return 1;
-}
-
-
 
 
 
